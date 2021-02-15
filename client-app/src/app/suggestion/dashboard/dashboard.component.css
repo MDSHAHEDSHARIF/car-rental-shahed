@@ -1,0 +1,77 @@
+.calendar {
+    float: right;
+    width: 50%;
+    height: 100%;
+}
+
+#infomation {
+    float: left;
+}
+
+#carsAvailable, #carsRented, #userActive, #bookings{
+    margin-top: 2%;
+}
+
+
+#carsAvailable {
+    background-color:  rgb(114, 255, 101);
+    float: left;
+}
+
+
+#carsAvailable, #bookings {
+    white-space: nowrap;
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+#carsRented {
+    background-color: rgb(253, 97, 118);
+    float: right;
+}
+
+#userActive {
+    background-color: #fff132;
+}
+
+#userActive img {
+    width: 100px;
+}
+
+#bookings {
+    background-color: beige;
+    float: right;
+}
+
+#bookings img {
+    width: 100px;
+}
+
+#carsRented img {
+    width: 100px;
+}
+
+#carsAvailable img {
+    width: 100px;
+}
+
+.text h1 {
+    font-family: monospace;
+}
+
+#welcome{
+    background-color:  rgb(255, 146, 110);
+    color: white;
+    text-align: center;
+    font-weight: 700;
+}
+
+#today {
+    width: 50%;
+    margin-left: 15%;
+    margin-bottom: 2%;
+}
+
+.filterInput {
+    width: 100%;
+}

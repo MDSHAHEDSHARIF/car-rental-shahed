@@ -1,0 +1,146 @@
+<div *ngIf="!checkIfUser()">
+    <button id="add" pButton type="button" icon="fa fa-plus" [routerLink]="['/rental/car']" iconPos="left" label="Add"></button>
+</div>
+<div id="progress" *ngIf = "!cars">
+<p-progressSpinner></p-progressSpinner>
+</div>
+<div *ngIf = 'cars'>
+    <div class="filters">
+    <div class="ui-g" *ngIf="advancedFilters">
+        <div class="ui-g-2">
+            <p><b>Filter results by:</b></p>
+                </div>
+        <div class="ui-g-2">
+                <p-multiSelect [options]="itemsCategories" (click)="sortByCategory()" [(ngModel)]="selectedCategories" [panelStyle]="{minWidth:'14em'}">
+                    <ng-template let-value pTemplate="selectedItems">
+                        <div *ngFor="let val of value" class="ui-multiselected-item-token ui-corner-all">
+                            <img src="data:image/jpeg;base64,{{val.photo}}" style="width:50px;vertical-align:middle;margin-right:.5em" />
+                            <span>{{val.name}}</span>
+                        </div>
+                        <span *ngIf="!value || value.length === 0" class="ui-multiselected-empty-token ui-corner-all">Choose</span>
+                    </ng-template>
+                    <ng-template let-category pTemplate="item">
+                        <img src="data:image/jpeg;base64,{{category.value.photo}}" style="width:40px;display:inline-block;vertical-align:middle"/>
+                        <div style="font-size:14px;float:right">{{category.label}}</div>
+                    </ng-template>
+                </p-multiSelect>
+        </div>
+            <div class="ui-g-3">
+               From
+                <p-calendar placeholder = "Pick a date" [minDate]="today" [maxDate]="endDate" [style]="{'width':'300px','margin-top':'8px'}" [(ngModel)]="startDate" showButtonBar="true"></p-calendar>
+            </div>
+            <div class="ui-g-3">
+                Until
+                <p-calendar placeholder = "Pick a date"   [minDate]="startDate" [style]="{'width':'300px','margin-top':'8px'}" [(ngModel)]="endDate" showButtonBar="true"></p-calendar>
+            </div>
+            <div id="results" class="ui-g-3">
+                <button pButton icon="pi pi-search" type="button" label="Search" (click)="search()" class="ui-button-rounded"></button>
+                <button id="reset" pButton type="button" label="Reset" icon="pi pi-times" class="ui-button-rounded ui-button-secondary" (click)="reset()"></button>
+              </div>
+        </div>
+    </div>
+<p-dataView #dv [value]="cars" [paginator]="true" [rows]="4" [lazy]="true" [(first)]="first" [totalRecords]="totalRecords" (onPage)="paginate($event)" paginatorPosition="top" filterBy="type"> 
+<p-header>
+    <div class="ui-helper-clearfix">
+        <div class="ui-g"> 
+            <div class="ui-g-12 ui-md-4">
+                <p id="advanced" (click)="selectIfAdvanced()">Advanced filters...</p>
+            </div>   
+            <div class="ui-g-6 ui-md-4 filter-container">
+                <div style="position:relative">
+                    <input type="search" pInputText placeholder="Search by brand" [(ngModel)]="brand" (keyup.enter)="search()">
+                </div>
+            </div>       
+            <div class="ui-g-6 ui-md-4 text" style="text-align:right;">
+                <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+            </div>
+        </div>
+    </div>
+</p-header>
+<ng-template let-car pTemplate="listItem">
+    <div class="ui-g-12">
+        <div class="car-details">
+            <div>
+                <p-splitButton [ngStyle]='myStyle()' label="Details" icon="pi pi-file" (onDropdownClick)="selectCarToEdit($event, car)" (onClick)="selectCar($event,car)" [model]="items" icon="pi pi-search" styleClass="ui-button-secondary"></p-splitButton>
+              <img id="carPhoto" src="data:image/jpeg;base64,{{car.photo}}" width="100px">
+              <div id="availableDiv">
+                <img id="availableImage" src="../../../assets/images/general/{{checkTodayStatus(car)}}.png" alt="Availability">
+            </div>
+                <div  class="ui-g" style="margin-left: 35%; text-align: justify;">
+                    <div class="ui-g-12">Name: <b>{{car.name}}</b></div>
+                    <div class="ui-g-12">Year: <b>{{car.year}}</b></div>
+                    <div class="ui-g-12">Brand: <b>{{car.type}}</b></div>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template let-car pTemplate="gridItem">
+    <div style="padding:.5em" class="ui-g-12 ui-md-3">
+        <p-panel [header]="car.name" [style]="{'text-align':'center'}">
+          <img src="data:image/jpeg;base64,{{car.photo}}" width="180px">
+            <div class="car-detail">{{car.year}} - {{car.type}}</div>
+            <img id="availability" src="../../../assets/images/general/{{checkTodayStatus(car)}}.png" alt="Availability">
+            <hr class="ui-widget-content" style="border-top:0">
+            <p-splitButton label="Details" icon="pi pi-file" (onDropdownClick)="selectCarToEdit($event, car)" (onClick)="selectCar($event,car)" [model]="items" icon="pi pi-search" styleClass="ui-button-primary"></p-splitButton>
+        </p-panel>
+    </div>
+</ng-template>
+</p-dataView>
+
+<p-dialog header="Car Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [style]="stylePopUp()"  (onAfterHide)="onDialogHide()">
+<div class="dialog ui-g" *ngIf="selectedCar">
+    <div class="ui-g-12" style="text-align:center">
+      <img id="popUpImage" src="data:image/jpeg;base64,{{selectedCar.photo}}">
+    </div>
+    <div class="ui-g-4"><b>Name:</b> </div>
+    <div class="ui-g-8">{{selectedCar.name}}</div>
+
+    <div class="ui-g-4"><b>Brand: </b></div>
+    <div class="ui-g-8">{{selectedCar.type}}</div>
+
+    <div class="ui-g-4"><b>Year:</b> </div>
+    <div class="ui-g-8">{{selectedCar.year}}</div>
+
+    <div class="ui-g-4"><b>Plate: </b></div>
+    <div class="ui-g-8">{{selectedCar.plate}}</div>
+
+    <div class="ui-g-4"><b>Description: </b></div>
+    <div class="ui-g-8" style="text-align: justify;">{{selectedCar.description}}</div>
+
+    <div class="ui-g-4"><b>Availability: </b></div>
+    <div class="ui-g-8">
+        <img id="availability" src="../../../assets/images/general/{{checkTodayStatus(selectedCar)}}.png" alt="Availability">
+    </div>
+
+    <div class="ui-g-4"><b>Fuel: </b></div>
+    <div class="ui-g-8">{{selectedCar.diesel}}</div>
+
+    <div class="ui-g-4"><b>Price: </b></div>
+    <div class="ui-g-8">{{selectedCar.price}} BDT/day</div>
+
+    <div class="ui-g-4"><b>Category:</b></div>
+    <div class="ui-g-8">{{selectedCar.category.name}}</div>
+    <div class="ui-g-12">
+        <b>Reserved dates:</b>
+        <ul *ngFor="let reservation of selectedCar.reservedDates"> 
+            <li>{{reservation[0] | date:'medium'}} - {{reservation[1] | date:'medium'}}</li>
+        </ul>
+    </div>
+    <div class="ui-g-12 calendar">
+        <p-calendar [inline]="true">
+            <ng-template pTemplate="date" let-date>
+                <span [ngStyle]="styleUnavailableDates(date)" style="border-radius:50%;padding: .25em;width: 1.75em; height:1.75em; display:block;">{{date.day}}</span>
+            </ng-template>
+        </p-calendar>
+    </div>
+    <div class="ui-g-8" *ngIf="!checkIfUser() && selectedCar.availability">
+        <button pButton type="button" label="Cancel bookings" (click)="cancelBookings(selectedCar.id)" class="ui-button-raised ui-button-danger"></button>
+    </div>
+    <div class="ui-g-8" *ngIf="checkIfUser()">
+    <button  pButton type="button" label="Book now" (click)="book()" class="ui-button-raised ui-button-success"></button>
+</div>
+</div>
+</p-dialog>
+</div>

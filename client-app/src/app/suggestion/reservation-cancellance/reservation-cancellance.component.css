@@ -1,0 +1,23 @@
+img {
+    width: 550px;
+    margin-bottom: 2%;
+}
+
+.reservations {
+    float:right;
+    margin-right: 5%;
+    width: 40%;
+}
+
+.reservations img {
+    width: 80%;
+    margin-left: 8%;
+}
+
+.date {
+    margin-left: 3%;
+}
+
+.confirm {
+    margin-top: 2%;
+}

@@ -1,0 +1,65 @@
+#categoryPhoto {
+    width: 100%;
+    align-content: center;
+}
+
+#description {
+    width: 219px;
+    height: 180px;
+}
+
+.reservation{
+    height: 400px;
+    overflow: scroll;
+}
+
+.date{
+    width: 200px;
+    margin-top: 5px;
+}
+
+.time{
+    margin-top: 5px;
+}
+
+
+#progress{
+    margin-top: 20%;
+    margin-left: 40%;
+}
+@keyframes ui-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #d62d20;
+    }
+    40% {
+        stroke: #0057e7;
+    }
+    66% {
+        stroke: #008744;
+    }
+    80%,
+    90% {
+        stroke: #ffa700;
+    }
+}
+
+#search {
+    margin-left: 85%;
+}
+
+#advanced {
+    float:right;
+    font-size: 14px;
+    color:rgb(30, 108, 253);
+}
+
+#advanced:hover {
+    color:rgb(10, 95, 252);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#reset {
+    margin-left: 3%;
+}

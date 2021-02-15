@@ -1,0 +1,87 @@
+<ikubinfo-panel header="Car">
+  <div panel-content>
+<form role="form" [formGroup]="carForm">
+  <div class="form-content">
+    <div *ngIf="car !== null">
+      <img src="data:image/jpeg;base64,{{car.photo}}">
+      </div>
+    <ikubinfo-input label="Photo">
+    <div class="form-group">
+     <input type="file" formControlName="photo" class="form-control input-underline input-lg" (change)="uploadFile($event)" />
+    </div>
+    </ikubinfo-input>
+    <ikubinfo-input label="Name">
+      <div class="form-group">
+        <input pInputText formControlName="name" class="form-control input-underline input-lg" placeholder="Name" />
+        <p class="error" *ngIf="carForm.get('name').dirty && carForm.get('name').hasError('required')">*Please, fill in the name.</p>
+      </div>
+      </ikubinfo-input>
+    <ikubinfo-input label="Brand">
+      <div class="form-group">
+      <p-dropdown [options]="brands" formControlName="brand" filter="true">
+        <ng-template let-item pTemplate="selectedItem">
+            <img src="assets/images/car logos/{{item.label}}.png" style="width:16px;vertical-align:middle" />
+            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+        </ng-template>
+        <ng-template let-car pTemplate="item">
+            <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                <img src="assets/images/car logos/{{car.label}}.png" style="width:24px;position:absolute;top:1px;left:5px"/>
+                <div style="font-size:14px;float:right;margin-top:4px">{{car.label}}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
+  </div>
+    </ikubinfo-input>
+    <ikubinfo-input label="Year">
+    <div class="form-group">
+      <input pInputText pKeyFilter="int" formControlName="year" class="form-control input-underline input-lg" placeholder="Production year" />
+      <p class="error" *ngIf="carForm.get('year').dirty && carForm.get('year').hasError('required')">*Please, fill in the production year.</p>
+      <p class="error" *ngIf="carForm.get('year').dirty && carForm.get('year').hasError('minlength') || carForm.get('year').hasError('maxlength')">*Please, fill in a valid production year.</p>
+    </div>
+    </ikubinfo-input>
+    <ikubinfo-input label="Type of fuel">
+      <select class="custom-select"  formControlName="diesel" placeholder="Fuel">
+        <option value="" disabled>Choose the type of fuel</option>
+        <option *ngFor="let diesel of diesels" [ngValue]="diesel">{{diesel}}</option>
+      </select>
+      <p class="error" *ngIf="carForm.get('diesel').dirty && carForm.get('diesel').hasError('required')">*Please, select a type of fuel.</p>
+    </ikubinfo-input>
+    <ikubinfo-input label="Plate">
+    <div class="form-group">
+      <p-inputMask mask="aa-999-aa" formControlName="plate" placeholder="AA-BBB-CC"></p-inputMask>
+      <p class="error" *ngIf="carForm.get('plate').dirty && (carForm.get('plate').hasError('required') || carForm.get('plate').hasError('minlength'))">*Please, fill in a valid car plate.</p>
+    </div>
+    </ikubinfo-input>
+    <ikubinfo-input label="Description">
+    <div class="form-group">
+      <textarea pInputTextArea formControlName="description" spellcheck="true" class="form-control input-underline input-lg" placeholder="Description" autoResize="autoResize"></textarea>
+      <p class="error" *ngIf="carForm.get('description').dirty && carForm.get('description').hasError('minlength') || carForm.get('description').hasError('maxlength')">*Please, write only 50 to 10000 characters.</p>
+    </div>
+    </ikubinfo-input>
+    <ikubinfo-input label="Category">
+      <select class="custom-select"  formControlName="category">
+        <option value="" disabled>Choose the category</option>
+        <option *ngFor="let cat of categories" [ngValue]="cat.id">{{cat.name}}</option>
+      </select>
+    </ikubinfo-input>
+    <ikubinfo-input label="Price per day">
+    <div class="form-group">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">BDT</span>
+        <input type="text" pKeyFilter="money" formControlName="price" pInputText placeholder="Price">   
+        <span class="ui-inputgroup-addon">.00</span>      
+      </div>
+      <p class="error" *ngIf="carForm.get('price').dirty && carForm.get('price').hasError('required')">*Please, fill in the price per day.</p>
+    </div>
+  </ikubinfo-input>
+  <ikubinfo-input label="Availability">
+    <div class="form-group">
+      <p-selectButton [options]="types" formControlName="availability"></p-selectButton>
+    </div>
+</ikubinfo-input>
+</div>
+  <button pButton type="submit" [disabled]="carForm.invalid" (click)="submit()" class="ui-button-success" label="Submit" icon="pi pi-file"></button>
+    <button pButton type="button" id="reset" (click)="reset()" class="ui-button-secondary reset" label="Reset" icon="pi pi-times"></button>
+</form>
+</div>
+</ikubinfo-panel>

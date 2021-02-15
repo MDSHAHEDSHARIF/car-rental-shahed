@@ -1,0 +1,103 @@
+.button {
+    margin-top: 1%;
+    float: right;
+}
+
+#carPhoto{
+    width: 150px;
+    background-color: rgb(182, 182, 182);
+    border-radius: 5%;
+    float: left;
+    margin-top: 1%;
+}
+
+.green {
+    background-color: rgb(163, 241, 163);
+    margin-bottom: 1%;
+}
+
+.red {
+    background-color: rgb(163, 241, 163);
+    margin-bottom: 1%;
+}
+
+#popUpImage {
+    width: 500px;
+}
+
+#availability {
+    width: 64px;
+}
+
+#availableImage{
+    width: 64px;
+    float: right;
+}
+
+#availableDiv {
+    float: right;
+    margin-top: 20px;
+    margin-right: 25%;
+}
+
+#progress{
+    margin-top: 20%;
+    margin-left: 40%;
+}
+@keyframes ui-progress-spinner-color {
+    100%,
+    0% {
+        stroke: #d62d20;
+    }
+    40% {
+        stroke: #0057e7;
+    }
+    66% {
+        stroke: #008744;
+    }
+    80%,
+    90% {
+        stroke: #ffa700;
+    }
+}
+
+.dialog {
+    height: 600px !important;
+}
+
+.calendar {
+    width: 400px;
+}
+
+#add {
+    margin-bottom: 2%;
+}
+
+.filters {
+    background-color: rgb(250, 250, 250);
+    margin-bottom: 0.5%;
+}
+
+#results {
+    color: rgb(167, 167, 167);
+    height: 100px;
+}
+
+#advanced {
+    font-size: 14px;
+    color:rgb(30, 108, 253);
+}
+
+#advanced:hover {
+    color:rgb(10, 95, 252);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#reset {
+    margin-left: 3%;
+}
+
+#results {
+    margin-left: 85%;
+}

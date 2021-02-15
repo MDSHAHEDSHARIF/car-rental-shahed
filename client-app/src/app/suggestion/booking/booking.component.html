@@ -1,0 +1,54 @@
+<ikubinfo-panel header="Booking">
+  <div panel-content>
+    <div class="reservations">
+      <img src="assets/images/general/reservations.svg" alt="Reservations" />
+      <p-table [columns]="cols" [value]="car.reservedDates" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns">
+                    {{rowData[col.field] | date: 'medium'}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p>*Please, notice , if any , the current reserved dates of the {{car.type}} {{car.name}} .</p>
+    </div>
+<form role="form" [formGroup]="bookingForm">
+  <img src="data:image/jpeg;base64,{{car.photo}}">
+  <ikubinfo-input label="Car">
+    <div class="form-group">
+     <input type="text" pInputText formControlName="car" placeholder="Car name"/>
+    </div>
+  </ikubinfo-input>
+
+  <ikubinfo-input label="Pick-up">
+    <div class="form-group">
+      <p-calendar class="time" placeholder="What time?" [(ngModel)]="startTime" formControlName="startDate" (click)="calculateFee()" [timeOnly]="true"></p-calendar>
+      <p-calendar class="date" [minDate]="minDate" placeholder="What date?" [(ngModel)]="startDate" (click)="calculateFee()"   formControlName="startDate" [readonlyInput]="true"></p-calendar>
+    </div>
+  </ikubinfo-input>
+  <ikubinfo-input label="Drop-off">
+    <div class="form-group">
+      <p-calendar class="time" placeholder="What time?" [(ngModel)]="endTime" formControlName="endTime" (click)="calculateFee()" [timeOnly]="true"></p-calendar>
+      <p-calendar class="date" placeholder="What date?" [minDate]="minDate" [(ngModel)]="endDate" (click)="calculateFee()" formControlName="endDate" [readonlyInput]="true"></p-calendar>
+    </div>
+  </ikubinfo-input>
+  <ikubinfo-input label="Total Fee">
+    <div class="form-group">
+      <div class="ui-inputgroup">
+        <span class="ui-inputgroup-addon">BDT</span>
+        <input type="text" formControlName="fee" pKeyFilter="money" pInputText placeholder="Price">    
+      </div>
+    </div>
+  </ikubinfo-input>
+  <button pButton type="button" label="Confirm" (click)="book()" class="ui-button-raised ui-button-success"></button>
+  </form>
+  </div>
+  </ikubinfo-panel>

@@ -1,0 +1,67 @@
+<p-table [columns]="cols" [value]="categories" [totalRecords]="totalRecords" (onPage)="paginate($event)"
+ selectionMode="single" [(selection)]="selectedCategory" (onRowSelect)="onRowSelect($event)"
+  [paginator]="true" [rows]="5" [(first)]="first" [lazy]="true">
+  <ng-template pTemplate="caption">
+      List of categories
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+      <tr>
+          <th *ngFor="let col of columns">
+              {{col.header}}
+          </th>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+          <td *ngFor="let col of columns">
+            <img id="categoryPhoto" *ngIf="col.field === 'photo'" src="data:image/jpeg;base64,{{rowData[col.field]}}" />
+            <p *ngIf="col.field !== 'photo'"> {{rowData[col.field]}}</p>
+          </td>
+      </tr>
+  </ng-template>
+  <ng-template pTemplate="summary" let-rowData>
+      <div style="text-align:left">
+          <button type="button" pButton icon="fa fa-plus" (click)="showDialogToAdd()" label="Add"></button>
+      </div>
+  </ng-template>    
+</p-table>
+
+<p-dialog header="Category Details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '400px'}">
+  <div class="ui-g ui-fluid" *ngIf="category">
+      <form role="form" [formGroup]="categoryForm">
+      <div class="ui-g-12">
+          <div class="ui-g-4">
+              <label for="name">Name</label>
+          </div>
+          <div class="ui-g-8">
+              <input formControlName="name" pInputText id="name" [(ngModel)]="category.name" autofocus placeholder="Name"/>
+              <p class="error" *ngIf="categoryForm.get('name').dirty && categoryForm.get('name').hasError('required')">*Please, fill in the name.</p>
+            </div>
+      </div>
+      <div class="ui-g-12">
+          <div class="ui-g-4">
+              <label for="description">Description</label>
+          </div>
+          <div class="ui-g-8">
+            <textarea formControlName="description" placeholder="Write a brief description here..." pInputTextarea id="description" placeholder = "What's this about?" [(ngModel)]="category.description"></textarea>
+            <p class="error" *ngIf="categoryForm.get('description').dirty && categoryForm.get('description').hasError('required')">*Please, fill in a description.</p>
+            <p class="error" *ngIf="categoryForm.get('description').dirty && (categoryForm.get('description').hasError('minlength') || categoryForm.get('description').hasError('maxlength'))">*Please, write 50 up to 255 characters only.</p>
+        </div>
+      </div>
+      <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="photo">Photo</label>
+        </div>
+        <div class="ui-g-8">
+            <input type="file" id="photo" [(ngModel)]="category.photo" [ngModelOptions]="{standalone: true}" (change)="uploadFile($event)" />
+        </div>
+    </div>
+</form>
+  </div>
+  <p-footer>
+      <div class="ui-dialog-buttonpane ui-helper-clearfix">
+          <button  *ngIf="!newCategory" type="button" pButton icon="fa fa-close" (click)="delete()" label="Delete"></button>
+          <button type="button" [disabled]="categoryForm.invalid" pButton icon="fa fa-check" (click)="save()" label="Save"></button>
+      </div>
+  </p-footer>
+</p-dialog>
